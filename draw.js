@@ -133,7 +133,10 @@ function draw() {
 		else {
 			for (let j = 0; j < blockades.length; j++) {
 				if (blockades[j].hits(agents[i])) {
+					// penalize agents for colliding with blockades
+					agents[i].fitness = Math.max(agents[i].fitness - 50,0);
 					agents.splice(i, 1);
+					break;
 				}
 			}
 		}
