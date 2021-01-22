@@ -44,6 +44,14 @@ class Agent {
 		if (this.y - 50 > this.fitness) {
 			this.fitness = this.y - 50;
 		}
+		
+		if (this.y <= 0) {
+			this.fitness = 0;
+		}
+		
+		if (this.y >= YSIZE) {
+			this.fitness = this.fitness + (CYCLE_LIMIT - cycles) * 2;
+		}
 	}
 	
 	show() {

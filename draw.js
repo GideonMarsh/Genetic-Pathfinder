@@ -2,9 +2,9 @@
 const XSIZE = 500;
 const YSIZE = 500;
 
-const POPULATION_SIZE = 100;
+const POPULATION_SIZE = 500;
 const CYCLE_LIMIT = 500;
-const MUTATION_CHANCE = 0.001;
+const MUTATION_CHANCE = 0.0025;
 
 let blockades = [];
 let agents = [];
@@ -20,6 +20,8 @@ let genSpan;
 let bestAgent;
 let bestSpan;
 let champSpan;
+
+let showBrain = false;
 
 function setup() {
 	let canvas = createCanvas(XSIZE,YSIZE);
@@ -46,22 +48,30 @@ function setup() {
 	}
 	allAgents = [...agents];
 	bestAgent = allAgents[0];
+	
+	document.addEventListener('keydown', function(event) {
+		if (event.keyCode === 66) {
+			showBrain = !showBrain;
+		}
+	});
 }
 
 function nextGeneration() {
 	cycles = 0;
 	generation++;
 	
-	let sum = 0;
+	let ave = 0;
 	for (let i = 0; i < allAgents.length; i++) {
-		sum = sum + allAgents[i].fitness;
+		ave = ave + allAgents[i].fitness;
 	}
+	
+	ave = Math.max(ave / POPULATION_SIZE, 1);
 	
 	let breedingList = []
 	let fitnessTotal = 0;
 	
 	for (let i = 0; i < allAgents.length; i++) {
-		fitnessTotal = Math.floor((allAgents[i].fitness / sum) * 500);
+		fitnessTotal = allAgents[i].fitness >= ave ? Math.floor((allAgents[i].fitness / ave) * 100) : 0;
 		for (let j = 0; j < fitnessTotal; j++) {
 			breedingList[breedingList.length] = allAgents[i];
 		}
@@ -108,6 +118,8 @@ function draw() {
 		blockades[i].show();
 	}
 	
+	fitnessAve = 0;
+	
 	for (let i = 0; i < allAgents.length; i++) {
 		if (allAgents[i].fitness > bestAgent.fitness) {
 			bestAgent.best = false;
@@ -120,16 +132,16 @@ function draw() {
 		fitnessAve = fitnessAve + allAgents[i].fitness;
 	}
 	
-	fitnessAve = fitnessAve / POPULATION_SIZE;
+	fitnessAve = Math.max(fitnessAve / POPULATION_SIZE, 1);
 	
 	for (let i = 0; i < allAgents.length; i++) {
-		allAgents[i].color = 127 * allAgents[i].fitness / fitnessAve;
+		allAgents[i].color = Math.min(Math.max(127 * allAgents[i].fitness / fitnessAve, 0), 255);
 		allAgents[i].show();
 	}
 	
 	cycles++;
 	
-	bestAgent.brain.show();
+	if (showBrain) {bestAgent.brain.show();}
 	
 	if (cycles >= CYCLE_LIMIT || agents.length == 0) {nextGeneration();}
 	

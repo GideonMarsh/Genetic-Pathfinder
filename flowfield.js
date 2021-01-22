@@ -24,8 +24,9 @@ class FlowField {
 				newField[i] = Math.random() * Math.PI * 2;
 			}
 			else {
-				let sum = p1.fitness + p2.fitness;
-				if (Math.random() * sum < p1.fitness) {
+				//let sum = p1.fitness + p2.fitness;
+				//if (Math.random() * sum < p1.fitness) {
+				if (Math.random() > 0.5) {
 					newField[i] = p1.brain.field[i];
 				}
 				else {
