@@ -11,12 +11,14 @@ class Agent {
 		this.color = 0;
 	}
 	
+	// set the flowfield of this agent
 	setBrain(ff) {
 		if (ff instanceof FlowField) {
 			this.brain = ff;
 		}
 	}
 	
+	// update agent position and fitness
 	update() {
 		// first update movement direction
 		let newAngle = this.brain.getAngle(this.x, this.y);
@@ -33,27 +35,27 @@ class Agent {
 			this.direction = this.direction > newAngle ? newAngle + difference : this.direction + difference;
 		}
 		
-		
-		//this.direction = newAngle;//((this.direction + this.direction + newAngle) / 3) % (Math.PI * 2);
-		
 		// move agent
-		
 		this.x = this.x + Math.cos(this.direction) * this.speed;
 		this.y = this.y + Math.sin(this.direction) * this.speed;
 		
+		// check if fitness should be increased
 		if (this.y - 50 > this.fitness) {
 			this.fitness = this.y - 50;
 		}
 		
+		// if agent hits top of the canvas, set their fitness to 0
 		if (this.y <= 0) {
 			this.fitness = 0;
 		}
 		
+		// if agent hits the bottom of the canvas, increase their fitness based on the remaining time in this generation
 		if (this.y >= YSIZE) {
 			this.fitness = this.fitness + (CYCLE_LIMIT - cycles) * 2;
 		}
 	}
 	
+	// display function
 	show() {
 		if (this.best) {
 			stroke(255 - this.color,this.color,255, 150);

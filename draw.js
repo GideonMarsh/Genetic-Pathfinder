@@ -24,9 +24,11 @@ let champSpan;
 let showBrain = false;
 
 function setup() {
+	// create the canvas
 	let canvas = createCanvas(XSIZE,YSIZE);
 	canvas.parent('canvascontainer');
 	
+	// get references to the display elements
 	cycleSpan = select('#counter');
 	genSpan = select('#gen');
 	bestSpan = select('#best');
@@ -49,6 +51,7 @@ function setup() {
 	allAgents = [...agents];
 	bestAgent = allAgents[0];
 	
+	// pressing 'b' toggles the display of the best agent's flowfield
 	document.addEventListener('keydown', function(event) {
 		if (event.keyCode === 66) {
 			showBrain = !showBrain;
@@ -56,20 +59,23 @@ function setup() {
 	});
 }
 
+// reset the simulation and create a new set of agents
 function nextGeneration() {
 	cycles = 0;
 	generation++;
 	
+	// calculate the average fitness of all agents
 	let ave = 0;
 	for (let i = 0; i < allAgents.length; i++) {
 		ave = ave + allAgents[i].fitness;
 	}
-	
 	ave = Math.max(ave / POPULATION_SIZE, 1);
 	
 	let breedingList = []
 	let fitnessTotal = 0;
 	
+	// only agents whos performance is average or better are added to the pool of potential parents
+	// higher performing agents are added to the pool more times, resulting in them having a higher chance to be chosen as parents
 	for (let i = 0; i < allAgents.length; i++) {
 		fitnessTotal = allAgents[i].fitness >= ave ? Math.floor((allAgents[i].fitness / ave) * 100) : 0;
 		for (let j = 0; j < fitnessTotal; j++) {
@@ -77,6 +83,9 @@ function nextGeneration() {
 		}
 	}
 	
+	// create a new population of agents
+	// randomly select two parents from the pool of potential parents and randomly combine their flowfields to create the flowfield for each agent
+	// the same parent may be chosen to be both of a new agent's parents
 	let parent1;
 	let parent2;
 	
@@ -90,8 +99,10 @@ function nextGeneration() {
 		
 		agents[i] = a;
 	}
+	// The best performer from the last generation is always carried over without changes
+	agents[0].setBrain(bestAgent.brain);
+	bestAgent = agents[0];
 	allAgents = [...agents];
-	bestAgent = allAgents[0];
 	
 	fitnessAve = 0;
 }
@@ -99,7 +110,9 @@ function nextGeneration() {
 function draw() {
 	background(0);
 	
-	// move agents
+	// update agent position and fitness
+	// if an agent has moved outside of the canvas or has hit a blockade, remove them from the agents array
+	// only update agents in the agents array
 	for (let i = 0; i < agents.length; i++) {
 		agents[i].update();
 		if (agents[i].x < 0 || agents[i].x > XSIZE || agents[i].y < 0 || agents[i].y > YSIZE) {
@@ -113,11 +126,9 @@ function draw() {
 			}
 		}
 	}
-	
-	for (let i = 0; i < blockades.length; i++) {
-		blockades[i].show();
-	}
-	
+		
+	// find the average fitness and the current best performing agent
+	// if the record for performance has been broken, update it
 	fitnessAve = 0;
 	
 	for (let i = 0; i < allAgents.length; i++) {
@@ -134,17 +145,26 @@ function draw() {
 	
 	fitnessAve = Math.max(fitnessAve / POPULATION_SIZE, 1);
 	
+	// draw the blockades
+	for (let i = 0; i < blockades.length; i++) {
+		blockades[i].show();
+	}
+	
+	// set the colors of the agents and draw them
 	for (let i = 0; i < allAgents.length; i++) {
 		allAgents[i].color = Math.min(Math.max(127 * allAgents[i].fitness / fitnessAve, 0), 255);
 		allAgents[i].show();
 	}
 	
+	// increment the cycle counter
 	cycles++;
 	
 	if (showBrain) {bestAgent.brain.show();}
 	
+	// if cycle limit has been reached, make a new generation
 	if (cycles >= CYCLE_LIMIT || agents.length == 0) {nextGeneration();}
 	
+	// update display elements
 	cycleSpan.html(cycles);
 	genSpan.html(generation);
 	bestSpan.html(Math.floor(bestAgent.fitness));
