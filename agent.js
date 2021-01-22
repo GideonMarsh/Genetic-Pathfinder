@@ -2,10 +2,10 @@
 class Agent {
 	constructor() {
 		this.x = 250;
-		this.y = 490;
+		this.y = 50;
 		this.direction = 0;
 		this.brain;
-		this.speed = 2;
+		this.speed = 3;
 	}
 	
 	setBrain(ff) {
@@ -40,8 +40,8 @@ class Agent {
 	}
 	
 	show() {
-		stroke(255);
-		fill(255);
+		stroke(255, 150);
+		fill(255, 50);
 		
 		ellipse(this.x, this.y, 10, 10);
 	}

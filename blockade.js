@@ -7,9 +7,11 @@ class Blockade {
 		this.h = h;
 	}
 	
-	hits(Agent) {
-		if (Agent.x > this.x && Agent.x < this.x + this.w && Agent.y > this.y && Agent.y < this.y + this.h) {
-			return true;
+	hits(agent) {
+		if (agent instanceof Agent) {
+			if (agent.x > this.x && agent.x < this.x + this.w && agent.y > this.y && agent.y < this.y + this.h) {
+				return true;
+			}
 		}
 		return false;
 	}
