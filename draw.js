@@ -12,11 +12,11 @@ let allAgents = [];
 let cycles = 0;
 let generation = 1;
 
-let currentBest = 0;
 let totalBest = 0;
 
 let cycleSpan;
 let genSpan;
+let bestAgent;
 let bestSpan;
 let champSpan;
 
@@ -44,6 +44,7 @@ function setup() {
 		agents[i] = a;
 	}
 	allAgents = [...agents];
+	bestAgent = allAgents[0];
 }
 
 function nextGeneration() {
@@ -52,15 +53,15 @@ function nextGeneration() {
 	
 	let sum = 0;
 	for (let i = 0; i < allAgents.length; i++) {
-		sum = sum + allAgents[i].y;
+		sum = sum + allAgents[i].fitness;
 	}
 	
 	let breedingList = []
-	let fitness = 0;
+	let fitnessTotal = 0;
 	
 	for (let i = 0; i < allAgents.length; i++) {
-		fitness = Math.floor((allAgents[i].y / sum) * 500);
-		for (let j = 0; j < fitness; j++) {
+		fitnessTotal = Math.floor((allAgents[i].fitness / sum) * 500);
+		for (let j = 0; j < fitnessTotal; j++) {
 			breedingList[breedingList.length] = allAgents[i];
 		}
 	}
@@ -79,8 +80,7 @@ function nextGeneration() {
 		agents[i] = a;
 	}
 	allAgents = [...agents];
-	
-	currentBest = 0;
+	bestAgent = allAgents[0];
 }
 
 function draw() {
@@ -107,11 +107,11 @@ function draw() {
 	
 	for (let i = 0; i < allAgents.length; i++) {
 		allAgents[i].show();
-		if (allAgents[i].y > currentBest) {
-			currentBest = Math.floor(allAgents[i].y);
+		if (allAgents[i].fitness > bestAgent.fitness) {
+			bestAgent = allAgents[i];
 		}
-		if (allAgents[i].y > totalBest) {
-			totalBest = Math.floor(allAgents[i].y);
+		if (allAgents[i].fitness > totalBest) {
+			totalBest = Math.floor(allAgents[i].fitness);
 		}
 	}
 	
@@ -121,6 +121,6 @@ function draw() {
 	
 	cycleSpan.html(cycles);
 	genSpan.html(generation);
-	bestSpan.html(currentBest);
+	bestSpan.html(Math.floor(bestAgent.fitness));
 	champSpan.html(totalBest);
 }

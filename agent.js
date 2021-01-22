@@ -6,6 +6,7 @@ class Agent {
 		this.direction = 0;
 		this.brain;
 		this.speed = 3;
+		this.fitness = 0;	// fitness is the record highest y value for this organism
 	}
 	
 	setBrain(ff) {
@@ -37,6 +38,10 @@ class Agent {
 		
 		this.x = this.x + Math.cos(this.direction) * this.speed;
 		this.y = this.y + Math.sin(this.direction) * this.speed;
+		
+		if (this.y - 50 > this.fitness) {
+			this.fitness = this.y - 50;
+		}
 	}
 	
 	show() {
