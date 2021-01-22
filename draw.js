@@ -14,12 +14,13 @@ let generation = 1;
 
 let totalBest = 0;
 let fitnessAve = 0;
+let previousAve = 0;
 
 let cycleSpan;
 let genSpan;
 let bestAgent;
-let bestSpan;
 let champSpan;
+let aveSpan;
 
 let showBrain = false;
 
@@ -31,8 +32,8 @@ function setup() {
 	// get references to the display elements
 	cycleSpan = select('#counter');
 	genSpan = select('#gen');
-	bestSpan = select('#best');
 	champSpan = select('#champ');
+	aveSpan = select('#ave');
 	
 	// create the blockades
 	blockades[0] = new Blockade(0, 150, 250, 30);
@@ -104,6 +105,17 @@ function nextGeneration() {
 	bestAgent = agents[0];
 	allAgents = [...agents];
 	
+	// update the display of average improvement
+	let newAve = Math.floor(ave - previousAve);
+	
+	if (newAve >= 0) {
+		aveSpan.html("+" + newAve);
+	}
+	else {
+		aveSpan.html(newAve);
+	}
+	previousAve = ave;
+	
 	fitnessAve = 0;
 }
 
@@ -167,6 +179,5 @@ function draw() {
 	// update display elements
 	cycleSpan.html(cycles);
 	genSpan.html(generation);
-	bestSpan.html(Math.floor(bestAgent.fitness));
 	champSpan.html(totalBest);
 }
