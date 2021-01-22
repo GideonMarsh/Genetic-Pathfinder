@@ -40,7 +40,7 @@ class FlowField {
 		var x;
 		var y;
 		var size = this.resolution / 2;
-		stroke(100);
+		stroke(100,100);
 		for (let i = 0; i < this.field.length; i++) {
 			x = (i % this.cols) * this.resolution + size;
 			y = Math.floor(i / this.cols) * this.resolution + size;

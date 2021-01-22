@@ -13,6 +13,7 @@ let cycles = 0;
 let generation = 1;
 
 let totalBest = 0;
+let fitnessAve = 0;
 
 let cycleSpan;
 let genSpan;
@@ -81,6 +82,8 @@ function nextGeneration() {
 	}
 	allAgents = [...agents];
 	bestAgent = allAgents[0];
+	
+	fitnessAve = 0;
 }
 
 function draw() {
@@ -106,16 +109,27 @@ function draw() {
 	}
 	
 	for (let i = 0; i < allAgents.length; i++) {
-		allAgents[i].show();
 		if (allAgents[i].fitness > bestAgent.fitness) {
+			bestAgent.best = false;
 			bestAgent = allAgents[i];
+			bestAgent.best = true;
 		}
 		if (allAgents[i].fitness > totalBest) {
 			totalBest = Math.floor(allAgents[i].fitness);
 		}
+		fitnessAve = fitnessAve + allAgents[i].fitness;
+	}
+	
+	fitnessAve = fitnessAve / POPULATION_SIZE;
+	
+	for (let i = 0; i < allAgents.length; i++) {
+		allAgents[i].color = 127 * allAgents[i].fitness / fitnessAve;
+		allAgents[i].show();
 	}
 	
 	cycles++;
+	
+	bestAgent.brain.show();
 	
 	if (cycles >= CYCLE_LIMIT || agents.length == 0) {nextGeneration();}
 	

@@ -7,6 +7,8 @@ class Agent {
 		this.brain;
 		this.speed = 3;
 		this.fitness = 0;	// fitness is the record highest y value for this organism
+		this.best = false;
+		this.color = 0;
 	}
 	
 	setBrain(ff) {
@@ -45,8 +47,15 @@ class Agent {
 	}
 	
 	show() {
-		stroke(255, 150);
-		fill(255, 50);
+		if (this.best) {
+			stroke(255 - this.color,this.color,255, 150);
+			fill(255 - this.color,this.color,255, 50);
+
+		}
+		else {
+			stroke(255 - this.color,this.color,0, 200);
+			fill(255 - this.color,this.color,0, 100);
+		}
 		
 		ellipse(this.x, this.y, 10, 10);
 	}
