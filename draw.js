@@ -2,6 +2,8 @@
 const XSIZE = 500;
 const YSIZE = 500;
 
+const POPULATION_SIZE = 100;
+
 let blockades = [];
 let agents = [];
 
@@ -14,13 +16,20 @@ function setup() {
 	blockades[1] = new Blockade(250, 250, 250, 30);
 	blockades[2] = new Blockade(125, 350, 250, 30);*/
 	
-	agents[0] = new Agent();
-	
-	agents[0].setBrain(new FlowField(XSIZE, YSIZE, 10));
+	// create the initial pool of agents
+	for (let i = 0; i < POPULATION_SIZE; i++) {
+		agents[i] = new Agent();
+		agents[i].setBrain(new FlowField(XSIZE, YSIZE, 10));
+	}
 }
 
 function draw() {
 	background(0);
+	
+	// move agents
+	for (let i = 0; i < agents.length; i++) {
+		agents[i].update();
+	}
 	
 	
 	// draw everything
@@ -28,8 +37,8 @@ function draw() {
 		blockades[i].show();
 	}
 	
-	agents[0].update();
-	
-	agents[0].show();
+	for (let i = 0; i < agents.length; i++) {
+		agents[i].show();
+	}
 	agents[0].brain.show();
 }
