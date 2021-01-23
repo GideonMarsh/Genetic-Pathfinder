@@ -37,6 +37,12 @@ function setup() {
 	aveSpan = select('#ave');
 	
 	// create the blockades
+	blockades[0] = new Blockade(0, 150, 250, 30);
+	blockades[1] = new Blockade(250, 250, 250, 30);
+	blockades[2] = new Blockade(125, 350, 250, 30);
+	blockades[3] = new Blockade(0, 450, 125, 30);
+	blockades[4] = new Blockade(375, 450, 125, 30);
+	/*
 	for (let i = 0; i < 10; i++) {
 		blockades[i] = new Blockade(i * 50 + 10, 50, 30, 30);
 	}
@@ -63,7 +69,7 @@ function setup() {
 	}
 	for (let i = 0; i < 10; i++) {
 		blockades[i + 80] = new Blockade(i * 50 + 10, 450, 30, 30);
-	}
+	}*/
 	
 	// create the initial pool of agents
 	for (let i = 0; i < POPULATION_SIZE; i++) {
