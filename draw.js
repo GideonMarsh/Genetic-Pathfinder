@@ -5,6 +5,7 @@ const YSIZE = 500;
 const POPULATION_SIZE = 500;
 const CYCLE_LIMIT = 500;
 const MUTATION_CHANCE = 0.005;
+const BLOCKADE_PENALTY = 20;
 
 let blockades = [];
 let agents = [];
@@ -36,11 +37,33 @@ function setup() {
 	aveSpan = select('#ave');
 	
 	// create the blockades
-	blockades[0] = new Blockade(0, 150, 250, 30);
-	blockades[1] = new Blockade(250, 250, 250, 30);
-	blockades[2] = new Blockade(125, 350, 250, 30);
-	blockades[3] = new Blockade(0, 450, 125, 30);
-	blockades[4] = new Blockade(375, 450, 125, 30);
+	for (let i = 0; i < 10; i++) {
+		blockades[i] = new Blockade(i * 50 + 10, 50, 30, 30);
+	}
+	for (let i = 0; i < 10; i++) {
+		blockades[i + 10] = new Blockade(i * 50 + 10, 100, 30, 30);
+	}
+	for (let i = 0; i < 10; i++) {
+		blockades[i + 20] = new Blockade(i * 50 + 20, 150, 30, 30);
+	}
+	for (let i = 0; i < 10; i++) {
+		blockades[i + 30] = new Blockade(i * 50, 200, 30, 30);
+	}
+	for (let i = 0; i < 10; i++) {
+		blockades[i + 40] = new Blockade(i * 50 + 20, 250, 30, 30);
+	}
+	for (let i = 0; i < 10; i++) {
+		blockades[i + 50] = new Blockade(i * 50 + 10, 300, 30, 30);
+	}
+	for (let i = 0; i < 10; i++) {
+		blockades[i + 60] = new Blockade(i * 50 + 20, 350, 30, 30);
+	}
+	for (let i = 0; i < 10; i++) {
+		blockades[i + 70] = new Blockade(i * 50, 400, 30, 30);
+	}
+	for (let i = 0; i < 10; i++) {
+		blockades[i + 80] = new Blockade(i * 50 + 10, 450, 30, 30);
+	}
 	
 	// create the initial pool of agents
 	for (let i = 0; i < POPULATION_SIZE; i++) {
@@ -101,7 +124,7 @@ function nextGeneration() {
 		agents[i] = a;
 	}
 	// The best performer from the last generation is always carried over without changes
-	agents[0].setBrain(bestAgent.brain);
+	//agents[0].setBrain(bestAgent.brain);
 	bestAgent = agents[0];
 	allAgents = [...agents];
 	
@@ -134,7 +157,7 @@ function draw() {
 			for (let j = 0; j < blockades.length; j++) {
 				if (blockades[j].hits(agents[i])) {
 					// penalize agents for colliding with blockades
-					agents[i].fitness = Math.max(agents[i].fitness - 50,0);
+					agents[i].fitness = Math.max(agents[i].fitness - BLOCKADE_PENALTY,0);
 					agents.splice(i, 1);
 					break;
 				}

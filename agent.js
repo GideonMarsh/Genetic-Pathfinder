@@ -1,8 +1,11 @@
 
+const START_X = 250;
+const START_Y = 20;
+
 class Agent {
 	constructor() {
 		this.x = 250;
-		this.y = 50;
+		this.y = 20;
 		this.direction = 0;
 		this.brain;
 		this.speed = 3;
@@ -40,8 +43,8 @@ class Agent {
 		this.y = this.y + Math.sin(this.direction) * this.speed;
 		
 		// check if fitness should be increased
-		if (this.y - 50 > this.fitness) {
-			this.fitness = this.y - 50;
+		if (this.y - START_Y > this.fitness) {
+			this.fitness = this.y - START_Y;
 		}
 		
 		// if agent hits top of the canvas, set their fitness to 0
