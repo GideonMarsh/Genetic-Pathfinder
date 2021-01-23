@@ -4,7 +4,7 @@ const YSIZE = 500;
 
 const POPULATION_SIZE = 500;
 const CYCLE_LIMIT = 500;
-const MUTATION_CHANCE = 0.0025;
+const MUTATION_CHANCE = 0.005;
 
 let blockades = [];
 let agents = [];
@@ -78,7 +78,7 @@ function nextGeneration() {
 	// only agents whos performance is average or better are added to the pool of potential parents
 	// higher performing agents are added to the pool more times, resulting in them having a higher chance to be chosen as parents
 	for (let i = 0; i < allAgents.length; i++) {
-		fitnessTotal = allAgents[i].fitness >= ave ? Math.floor((allAgents[i].fitness / ave) * 100) : 0;
+		fitnessTotal = allAgents[i].fitness >= ave ? Math.floor(allAgents[i].fitness - ave) : 0;
 		for (let j = 0; j < fitnessTotal; j++) {
 			breedingList[breedingList.length] = allAgents[i];
 		}
